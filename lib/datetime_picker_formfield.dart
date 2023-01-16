@@ -82,10 +82,20 @@ class DateTimeField extends FormField<DateTime> {
                 decoration: effectiveDecoration.copyWith(
                   errorText: field.errorText,
                   suffixIcon: state.shouldShowClearIcon(effectiveDecoration)
-                      ? IconButton(
-                          icon: resetIcon!,
-                          onPressed: state.clear,
-                        )
+                      ? MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: InkWell(
+                          onTap: state.clear,
+                          child: Container(
+                              padding: EdgeInsets.zero,
+                              height: 50,
+                              width: 50,
+                              child: IconButton(
+                                padding: EdgeInsets.zero,
+                                mouseCursor: SystemMouseCursors.click,
+                                icon: resetIcon!,
+                                onPressed: state.clear,
+                              ))))
                       : null,
                 ),
                 keyboardType: keyboardType,
