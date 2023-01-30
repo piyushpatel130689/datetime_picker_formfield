@@ -66,69 +66,79 @@ class DateTimeField extends FormField<DateTime> {
     bool enableInteractiveSelection = true,
     InputCounterWidgetBuilder? buildCounter,
   }) : super(
-            key: key,
-            autovalidateMode: autovalidateMode,
-            initialValue: initialValue,
-            enabled: enabled,
-            validator: validator,
-            onSaved: onSaved,
-            builder: (field) {
-              final _DateTimeFieldState state = field as _DateTimeFieldState;
-              final InputDecoration effectiveDecoration =
-                  (decoration ?? const InputDecoration()).applyDefaults(Theme.of(field.context).inputDecorationTheme);
-              return TextField(
-                controller: state._effectiveController,
-                focusNode: state._effectiveFocusNode,
-                decoration: effectiveDecoration.copyWith(
-                  errorText: field.errorText,
-                  suffixIcon: state.shouldShowClearIcon(effectiveDecoration)
-                      ? MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      child: InkWell(
-                          onTap: state.clear,
-                          child: Container(
-                              padding: EdgeInsets.zero,
-                              height: 50,
-                              width: 50,
-                              child: IconButton(
-                                padding: EdgeInsets.zero,
-                                mouseCursor: SystemMouseCursors.click,
-                                icon: resetIcon!,
-                                onPressed: state.clear,
-                              ))))
-                      : null,
-                ),
-                keyboardType: keyboardType,
-                textInputAction: textInputAction,
-                style: style,
-                strutStyle: strutStyle,
-                textAlign: textAlign,
-                textDirection: textDirection,
-                textCapitalization: textCapitalization,
-                autofocus: autofocus,
-                readOnly: readOnly,
-                showCursor: showCursor,
-                obscureText: obscureText,
-                autocorrect: autocorrect,
-                maxLengthEnforcement: maxLengthEnforcement,
-                maxLines: maxLines,
-                minLines: minLines,
-                expands: expands,
-                maxLength: maxLength,
-                onChanged: (string) => field.didChange(tryParse(string, format)),
-                onEditingComplete: onEditingComplete,
-                onSubmitted: (string) => onFieldSubmitted == null ? null : onFieldSubmitted(tryParse(string, format)),
-                inputFormatters: inputFormatters,
-                enabled: enabled,
-                cursorWidth: cursorWidth,
-                cursorRadius: cursorRadius,
-                cursorColor: cursorColor,
-                scrollPadding: scrollPadding,
-                keyboardAppearance: keyboardAppearance,
-                enableInteractiveSelection: enableInteractiveSelection,
-                buildCounter: buildCounter,
-              );
-            });
+      key: key,
+      autovalidateMode: autovalidateMode,
+      initialValue: initialValue,
+      enabled: enabled,
+      validator: validator,
+      onSaved: onSaved,
+      builder: (field) {
+        final _DateTimeFieldState state = field as _DateTimeFieldState;
+        final InputDecoration effectiveDecoration = (decoration ??
+            const InputDecoration())
+            .applyDefaults(Theme.of(field.context).inputDecorationTheme);
+        return TextField(
+          controller: state._effectiveController,
+          focusNode: state._effectiveFocusNode,
+          decoration: effectiveDecoration.copyWith(
+            errorText: field.errorText,
+            suffixIcon: state.shouldShowClearIcon(effectiveDecoration)
+                ? MouseRegion(
+                onEnter: (event) {
+                  state.setMouseHover(true);
+                },
+                onExit: (event) {
+                  state.setMouseHover(false);
+                },
+                cursor: SystemMouseCursors.click,
+                child: InkWell(
+                    onTap: state.clear,
+                    child: Container(
+                        padding: EdgeInsets.zero,
+                        height: 50,
+                        width: 50,
+                        child: IconButton(
+                          padding: EdgeInsets.zero,
+                          mouseCursor: SystemMouseCursors.click,
+                          icon: resetIcon!,
+                          onPressed: state.clear,
+                        ))))
+                : null,
+          ),
+          keyboardType: keyboardType,
+          textInputAction: textInputAction,
+          style: style,
+          strutStyle: strutStyle,
+          textAlign: textAlign,
+          textDirection: textDirection,
+          textCapitalization: textCapitalization,
+          autofocus: autofocus,
+          readOnly: readOnly,
+          showCursor: showCursor,
+          obscureText: obscureText,
+          autocorrect: autocorrect,
+          maxLengthEnforcement: maxLengthEnforcement,
+          maxLines: maxLines,
+          minLines: minLines,
+          expands: expands,
+          maxLength: maxLength,
+          onChanged: (string) =>
+              field.didChange(tryParse(string, format)),
+          onEditingComplete: onEditingComplete,
+          onSubmitted: (string) => onFieldSubmitted == null
+              ? null
+              : onFieldSubmitted(tryParse(string, format)),
+          inputFormatters: inputFormatters,
+          enabled: enabled,
+          cursorWidth: cursorWidth,
+          cursorRadius: cursorRadius,
+          cursorColor: cursorColor,
+          scrollPadding: scrollPadding,
+          keyboardAppearance: keyboardAppearance,
+          enableInteractiveSelection: enableInteractiveSelection,
+          buildCounter: buildCounter,
+        );
+      });
 
   /// For representing the date as a string e.g.
   /// `DateFormat("EEEE, MMMM d, yyyy 'at' h:mma")`
@@ -137,7 +147,8 @@ class DateTimeField extends FormField<DateTime> {
   final bool isRequired;
 
   /// Called when the date chooser dialog should be shown.
-  final Future<DateTime?> Function(BuildContext context, DateTime? currentValue) onShowPicker;
+  final Future<DateTime?> Function(BuildContext context, DateTime? currentValue)
+  onShowPicker;
 
   /// The [InputDecoration.suffixIcon] to show when the field has text. Tapping
   /// the icon will clear the text field. Set this to `null` to disable that
@@ -177,10 +188,11 @@ class DateTimeField extends FormField<DateTime> {
   }
 
   /// Sets the hour and minute of a [DateTime] from a [TimeOfDay].
-  static DateTime combine(DateTime date, TimeOfDay? time) =>
-      DateTime(date.year, date.month, date.day, time?.hour ?? 0, time?.minute ?? 0);
+  static DateTime combine(DateTime date, TimeOfDay? time) => DateTime(
+      date.year, date.month, date.day, time?.hour ?? 0, time?.minute ?? 0);
 
-  static DateTime? convert(TimeOfDay? time) => time == null ? null : DateTime(1, 1, 1, time.hour, time.minute);
+  static DateTime? convert(TimeOfDay? time) =>
+      time == null ? null : DateTime(1, 1, 1, time.hour, time.minute);
 }
 
 class _DateTimeFieldState extends FormFieldState<DateTime> {
@@ -188,11 +200,13 @@ class _DateTimeFieldState extends FormFieldState<DateTime> {
   FocusNode? _focusNode;
   bool isShowingDialog = false;
   bool hadFocus = false;
+  bool isMouseHoverOnClear = false;
 
   @override
   DateTimeField get widget => super.widget as DateTimeField;
 
-  TextEditingController? get _effectiveController => widget.controller ?? _controller;
+  TextEditingController? get _effectiveController =>
+      widget.controller ?? _controller;
   FocusNode? get _effectiveFocusNode => widget.focusNode ?? _focusNode;
 
   bool get hasFocus => _effectiveFocusNode!.hasFocus;
@@ -221,7 +235,8 @@ class _DateTimeFieldState extends FormFieldState<DateTime> {
       widget.controller?.addListener(_handleControllerChanged);
 
       if (oldWidget.controller != null && widget.controller == null) {
-        _controller = TextEditingController.fromValue(oldWidget.controller!.value);
+        _controller =
+            TextEditingController.fromValue(oldWidget.controller!.value);
         _controller!.addListener(_handleControllerChanged);
       }
       if (widget.controller != null) {
@@ -279,14 +294,15 @@ class _DateTimeFieldState extends FormFieldState<DateTime> {
     // notifications for changes originating from within this class -- for
     // example, the reset() method. In such cases, the FormField value will
     // already have been set.
-    if (_effectiveController!.text != format(value)) didChange(parse(_effectiveController!.text));
+    if (_effectiveController!.text != format(value))
+      didChange(parse(_effectiveController!.text));
   }
 
   String format(DateTime? date) => DateTimeField.tryFormat(date, widget.format);
   DateTime? parse(String text) => DateTimeField.tryParse(text, widget.format);
 
   Future<void> requestUpdate() async {
-    if (!isShowingDialog) {
+    if (!isShowingDialog && !isMouseHoverOnClear) {
       isShowingDialog = true;
       final newValue = await widget.onShowPicker(context, value);
       isShowingDialog = false;
@@ -311,6 +327,7 @@ class _DateTimeFieldState extends FormFieldState<DateTime> {
   }
 
   void clear() async {
+    isMouseHoverOnClear = false;
     _hideKeyboard();
     // Fix for ripple effect throwing exception
     // and the field staying gray.
@@ -321,5 +338,12 @@ class _DateTimeFieldState extends FormFieldState<DateTime> {
   }
 
   bool shouldShowClearIcon([InputDecoration? decoration]) =>
-      widget.resetIcon != null && !widget.isRequired && (hasText || hasFocus) && decoration?.suffixIcon == null;
+      widget.resetIcon != null &&
+          !widget.isRequired &&
+          (hasText || hasFocus) &&
+          decoration?.suffixIcon == null;
+
+  void setMouseHover(bool val) {
+    isMouseHoverOnClear = val;
+  }
 }
